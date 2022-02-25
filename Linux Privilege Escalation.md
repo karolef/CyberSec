@@ -2,15 +2,21 @@ Notes on privilege esc - might be formatted later (probably not)
 
 extremely useful
 curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems - https://gtfobins.github.io/#
+
 exploit-db - https://www.exploit-db.com/
 
 0. Enumeration
 
 automaded enum examples:
+
 [LinPeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
+
 [LinEnum](https://github.com/rebootuser/LinEnum)
+
 [LES (Linux Exploit Suggester)](https://github.com/mzet-/linux-exploit-suggester)
+
 [Linux Smart Enumeration](https://github.com/diego-treitos/linux-smart-enumeration)
+
 [Linux Priv Checker](https://github.com/linted/linuxprivchecker)
 
 hostname
