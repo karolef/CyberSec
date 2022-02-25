@@ -7,11 +7,11 @@ exploit-db - https://www.exploit-db.com/
 0. Enumeration
 
 automaded enum examples:
-LinPeas: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
-LinEnum: https://github.com/rebootuser/LinEnum
-LES (Linux Exploit Suggester): https://github.com/mzet-/linux-exploit-suggester
-Linux Smart Enumeration: https://github.com/diego-treitos/linux-smart-enumeration
-Linux Priv Checker: https://github.com/linted/linuxprivchecker
+[LinPeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
+[LinEnum](https://github.com/rebootuser/LinEnum)
+[LES (Linux Exploit Suggester)](https://github.com/mzet-/linux-exploit-suggester)
+[Linux Smart Enumeration](https://github.com/diego-treitos/linux-smart-enumeration)
+[Linux Priv Checker](https://github.com/linted/linuxprivchecker)
 
 hostname
 /proc/version - info about system processes
