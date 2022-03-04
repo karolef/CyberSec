@@ -1,0 +1,9 @@
+shell to meterpreter shell
+sessions -u <SESSION_ID>
+
+use post/multi/manage/shell_to_meterpreter
+
+on Windows:
+passwords stored-> C:\Windows\System32\config
+
+
