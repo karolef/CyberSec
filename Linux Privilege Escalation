@@ -81,6 +81,7 @@ Can you modify $PATH?
 Is there a script/application you can start that will be affected by this vulnerability?
 
 find / -writable 2>/dev/null | cut -d "/" -f 2 | sort -u
+find / -user root -perm -4000 -exec ls -ldb {} \;
 
 to add /tmp to PATH:
 export PATH=/tmp:$PATH
