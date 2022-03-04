@@ -5,3 +5,8 @@ nmap -sV -vv --script vuln $rhost
 --script=smb-enum-shares.nse,smb-enum-users.nse
 mmap -sU -sS --script smb-enum-shares.nse
 optionally if u want typical smb ports -> -p U:137,T:139
+
++ enumerating NFS
+
+nmap -p 111 --script=nfs-ls,nfs-statfs,nfs-showmount $rhost
+
