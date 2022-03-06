@@ -1,5 +1,8 @@
 nmap -sS -sV -sC -0 -T4 -Pn -n $rhost
 
++ initial scan to file
+nmap -sC -sV -oA nmap $rhost -Pn
+
 +full port range scan
 nmap -sT -T4 -p- --max-retries 1 $rhost
 
