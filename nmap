@@ -1,5 +1,12 @@
+nmap -sS -sV -sC -0 -T4 -Pn -n $rhost
+
++full port range scan
+nmap -sT -T4 -p- --max-retries 1 $rhost
+
+
 + version detection & checking for vulnerabilities
 nmap -sV -vv --script vuln $rhost
+
 
 + enumerating samba shares
 --script=smb-enum-shares.nse,smb-enum-users.nse
@@ -7,6 +14,5 @@ mmap -sU -sS --script smb-enum-shares.nse
 optionally if u want typical smb ports -> -p U:137,T:139
 
 + enumerating NFS
-
 nmap -p 111 --script=nfs-ls,nfs-statfs,nfs-showmount $rhost
 
