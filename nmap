@@ -1,4 +1,4 @@
-nmap -sS -sV -sC -0 -T4 -Pn -n $rhost
+nmap -sS -sV -sC -O -T4 -Pn -n $rhost
 
 + initial scan to file
 nmap -sC -sV -oA nmap $rhost -Pn
