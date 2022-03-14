@@ -2,6 +2,8 @@ Notes on privilege esc - might be formatted later (probably not)
 
 extremely useful
 curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems - https://gtfobins.github.io/#
+https://wadcoms.github.io/
+https://lolbas-project.github.io/
 
 exploit-db - https://www.exploit-db.com/
 
