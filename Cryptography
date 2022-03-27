@@ -1,0 +1,12 @@
+Tool to identify a hash:
+wget https://gitlab.com/kalilinux/packages/hash-identifier/-/raw/kali/master/hash-id.py
+python3 hash-id.py
+
+John The Ripper
+john --format=[format] --wordlist=[path to wordlist] [path to file]
+
+sometimes when dealing with a standard hash type, e.g. md5 add prefix raw-
+
+to check for formats:
+john --list=formats | grep -iF "md5"
+
