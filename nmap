@@ -2,7 +2,7 @@
 thanks Marcin  ;)
 
 sudo nmap $rhost -p- -sV --reason --open
-sudo nmap $rhost2 -A -T4
+sudo nmap $rhost -A -T4
 
 sudo nmap -sU --top-ports 100 $rhost
 =============================================
