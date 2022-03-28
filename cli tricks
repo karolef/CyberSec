@@ -1,0 +1,2 @@
+change IP (or anything) in a file
+sed -i ‘s/127.0.0.1/<your_ip>/g’ <input_file>
