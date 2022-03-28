@@ -1,10 +1,10 @@
 =============================================
 thanks Marcin  ;)
 
-sudo nmap 10.129.154.42 -p- -sV --reason --open
-sudo nmap 10.129.154.42 -A -T4
+sudo nmap $rhost -p- -sV --reason --open
+sudo nmap $rhost2 -A -T4
 
-sudo nmap -sU --top-ports 100 10.129.154.42
+sudo nmap -sU --top-ports 100 $rhost
 =============================================
 
 nmap -sS -sV -sC -O -T4 -Pn -n $rhost
