@@ -1,0 +1,2 @@
+
+ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" student@IP -p 2222
