@@ -1,2 +1,14 @@
 
 ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" student@IP -p 2222
+
+=====================
+
+Report
+- think about pentest objective
+- think about audience
+- think about what to include 
+  DO NOT include pages and pages of a tool output
+  DO take screenshots
+  DO Extra materials as supporting docs
+  DO Check back the objective of the assessment
+- presentation is key
