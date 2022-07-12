@@ -1,0 +1,9 @@
+systemctl - managing services
+
+sudo systemctl start ssh
+
+sudo ss -antlp | grep sshd
+
+sudo systemctl enable ssh --> will start service automatically at boot time
+
+systemctl list-unit-files --> list all avail services
