@@ -28,3 +28,20 @@ dpkg -i /path/to/.deb --> install package offline; -i --install
 =====================
 
 sudo -l --> list sudo commands for the current user
+
+=====================
+
+env variables
+
+$PATH
+$USER
+$PWD
+$HOME
+
+export variable_name=variable_value
+
+echo $variable_name
+
+$$ --> display PID of the current shell
+
+env --> list all env variables
