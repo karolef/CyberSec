@@ -45,3 +45,20 @@ echo $variable_name
 $$ --> display PID of the current shell
 
 env --> list all env variables
+
+
+=====================
+
+
+history
+!1 uses command 1 from history
+!! repeats the last command
+
+.bash_history --> command history is saved here
+
+HISTSIZE --> number of commands stored in memory for the current session
+HISTFILESIZE --> configures how many commands are kept in the history file
+both can be saved to .bashrc
+
+Ctrl + R --> reverse-i-search; autocompletes commands from history
+
