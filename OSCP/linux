@@ -25,3 +25,6 @@ apt remove --purge pure-ftpd --> removes a package; leaves small user config fil
 
 dpkg -i /path/to/.deb --> install package offline; -i --install
 
+=====================
+
+sudo -l --> list sudo commands for the current user
