@@ -70,3 +70,6 @@ awk -F ":" '{ if ($7 == "/bin/false") print $1 ":" $6; }' /etc/passwd
 
 sorting file by line length shortest - longest and printing 1st line
 cat text.txt | awk '{ print length, $0}' | sort -n | sed -n 1p
+
+print diff -> print every other line --> print all in one line
+diff log1.txt log2.txt | awk 'NR % 2 == 0' | awk -F ' ' '{printf $2}'
