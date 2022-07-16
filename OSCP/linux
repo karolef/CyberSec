@@ -73,3 +73,12 @@ cat text.txt | awk '{ print length, $0}' | sort -n | sed -n 1p
 
 print diff -> print every other line --> print all in one line
 diff log1.txt log2.txt | awk 'NR % 2 == 0' | awk -F ' ' '{printf $2}'
+
+=====================
+
+ps -ef
+-e all processes
+-f display full format listing (UID PID PPID etc)
+
+ps -fC leafpad
+-C select by command name
