@@ -62,3 +62,8 @@ both can be saved to .bashrc
 
 Ctrl + R --> reverse-i-search; autocompletes commands from history
 
+
+=====================
+
+if shell for a user is set to /bin/false per /etc/passwd then pring the username:home
+awk -F ":" '{ if ($7 == "/bin/false") print $1 ":" $6; }' /etc/passwd
