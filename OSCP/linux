@@ -82,3 +82,12 @@ ps -ef
 
 ps -fC leafpad
 -C select by command name
+
+=====================
+
+tail -f /var/log/apache2/access.log
+-f updates the output as the file grows
+-nX - outputs last X number of lines
+
+watch -n 5 w
+list logged in users once every 5s
