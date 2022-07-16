@@ -58,6 +58,11 @@ history
 
 HISTSIZE --> number of commands stored in memory for the current session
 HISTFILESIZE --> configures how many commands are kept in the history file
+HISTCONTROL --> defines whether or not to remove duplicate commands or commands that begin with spaces
+HISTIGNORE --> filters out some basic commands that are run frequently from history
+  export HISTIGNORE="&:ls:[bf]g:exit:history"
+HISTTIMEFORMAT --> controls date and/or time stamps in the output of history
+
 both can be saved to .bashrc
 
 Ctrl + R --> reverse-i-search; autocompletes commands from history
@@ -91,3 +96,8 @@ tail -f /var/log/apache2/access.log
 
 watch -n 5 w
 list logged in users once every 5s
+
+=====================
+
+/etc/bash.bashrc --> determines the behavior of interactive shells system-wide
+/home/user/.bashrc --> in the home dir, overrides bash.bashrc
