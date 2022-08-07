@@ -82,3 +82,50 @@ commands...
 }
 
 $? --> exit code
+
+================================================
+carving out subdomains out of index.html
+
+grep -o '[^/]*\.google\.com' index.html | sort -u > list.txt
+
+finding IPs of a list of hosts
+
+for url in $(cat list.txt); do host $url; done | grep "has address" | cut -d " " -f 4 | sort -u
+
+searching via searchsploit
+oneliner
+for e in $(searchsploit afd windows -w -t | grep http | cut -f 2 -d "|"); do exp_name=$(echo $e | cut -d "/" -f 5) && url=$(echo $e | sed 's/exploits/raw/') && wget -q --no-check-certificate $url -O $exp_name; done
+bash script
+
+#!/bin/bash
+# Bash script to search for a given exploit and download all matches.
+
+for e in $(searchsploit afd windows -w -t | grep http | cut -f 2 -d "|")
+
+do
+  exp_name=$(echo $e | cut -d "/" -f 5)
+  url=$(echo $e | sed 's/exploits/raw/')
+  wget -q --no-check-certificate $url -O $exp_name
+done
+
+capture rendered main && build an HTML file with those pngs
+
+for ip in $(cat nmap-scan_1.2.3.4-254 | grep 80 | grep -v "Nmap" | awk '{print $2}'); do cutycapt --url=$ip --out=$ip.png;done
+
+#!/bin/bash
+# Bash script to examine the scan results through HTML.
+
+echo "<HTML><BODY><BR>" > web.html
+
+ls -1 *.png | awk -F : '{ print $1":\n<BR><IMG SRC=\""$1""$2"\" width=600><BR>"}' >> web.html
+
+echo "</BODY></HTML>" >> web.html
+
+
+
+
+
+
+
+
+
