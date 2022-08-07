@@ -12,3 +12,12 @@ shodan
 
 security headers scanner --> https://securityheaders.com/
 
+email harvesting
+theharvester --> https://github.com/laramies/theHarvester
+
+scans a users twitter feed and generates a personalized wordlist
+twofi --> https://github.com/digininja/twofi
+
+generates username lists based on linkedin data
+linkedin2username --> https://github.com/initstring/linkedin2username
+
