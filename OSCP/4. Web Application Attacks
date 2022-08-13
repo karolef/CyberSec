@@ -1,0 +1,30 @@
+Web App Enum
+
+Inspecting
+  URLs
+  Page Content
+  Sitemaps (robots.txt && sitemap.xml)
+  Locating Admin Consoles
+  
+TOOLS
+DIRB - web content scanner using wordlists
+  -r scan non recursively
+  -z 10 delay in ms
+
+BurpSuite
+
+NIKTO - highly configurable open source web scanner; not designed for stealth
+  -host=http://www.testhost.com
+  -maxtime=30s controls duration; will halt the scan after specified time limit
+  -T control which types of tests we want to run
+  
+
+
+
+
+
+
+
+
+
+
