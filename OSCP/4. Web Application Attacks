@@ -34,7 +34,8 @@ HttpOnly - Forbids JavaScript from accessing the cookie; Note that a cookie that
 
 ==========================================================================================
 Path travesal
-
+win hosts file
+http://1.2.3.4/file.php?file=c:\windows\system32\drivers\etc\hosts
 
 
 
