@@ -1,0 +1,38 @@
+rinted - tool for redirecting traffic
+
+SSH local port forwarding
+ssh -N -L bind_address:port:host:hostport uname@address
+
+SSH remote port forwarding
+ssh -R -L bind_address:port:host:hostport uname@address
+
+SSH dynamic port forwarding
+ssh -N -D bind_address:port uname@address
+locally also setup proxychains
+/etc/proxychains.conf
+socks4 127.0.0.1 8080
+
+proxychains nmap --top-ports=20 -sT -Pn 1.2.3.4
+
+HTTP tunneling through deep packet inspection
+httptunnel
+
+local port forwarding back to our machine
+ssh -L 0.0.0.0:8888:1.2.3.4:3389 uname@localhost
+hts - server
+htc - client
+hts --forward-port localhost:8888 1234
+back on our machine
+htc --forward-port 8080 1.2.3.4:1234
+
+
+============================================================================================================
+WIN
+
+netstat -anpb TCP
+
+cmd.exe /c echo y | plink.exe -ssh -l kali -pw ilak -R 1.2.3.4:1234:127.0.0.1:3306 1/2/3/4
+
+netsh advfirewall firewall add rule name="forward_port_rule" protocol=TCP dir=in localip=1.2.3.4 localport=4455 action=allow
+netsh interface portproxy add v4tov4 listenport=4455 listenaddress=1.2.3.4 connectport=445 connectaddress=4.3.2.1
+
