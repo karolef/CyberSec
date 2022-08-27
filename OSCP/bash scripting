@@ -121,8 +121,16 @@ ls -1 *.png | awk -F : '{ print $1":\n<BR><IMG SRC=\""$1""$2"\" width=600><BR>"}
 
 echo "</BODY></HTML>" >> web.html
 
+================================================
+bash port scanner
 
-
+#!/bin/bash
+host=1.2.3.4
+for port in {1..65535}; do
+    timeout .1 bash -c "echo >/dev/tcp/$host/$port" &&
+        echo "port $port is open"
+done
+echo "Done"
 
 
 
