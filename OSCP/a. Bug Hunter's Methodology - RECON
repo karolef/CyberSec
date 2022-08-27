@@ -1,0 +1,212 @@
+Those notes are inspired by jhaddix Bug Hunter's Methodology
+
+RECON
+1) Good notes - Track your shit!
+mindmap with Xmind
+ALWAYS CHECK IF IN SCOPE
+
+2) Wide recon
+- scope domains --> finding seeds/roots
+    any host verified to be owned by tesla
+    *.tesla.com
+    *.teslamotors.com
+  TOOLs: TLSX
+  
+- acquisitions --> understand the company
+  check crunchbase.com
+        google.com
+        wiki
+  TOOLs: DOMlink --> recursively query whoxy
+  ./domlink.py -d vip.com -o vip.out.txt
+  
+- ASN enum --> cloud is prevalent, there can be rogue assets
+  TOOsL: bgp.he.net
+         metagigor ("net" switch) --> echo 'tesla' | metabigor net --org -v
+         ASNLookup (pulls from maxmind.com)
+         Amass --> discovering more seed domains we want to scan the whole ASN with port scanner and return any root domains we see in SSL certs
+         amass intel -asn 12345
+
+- reverse WHOIS
+  TOOLs: whoxy.com (medium fidelity data)
+  api.whoxy.com/?key=APIKEYHERE&reverse=whois&name=Twitch+Hostmaster
+
+- Ad/Analytics relationship
+  TOOLs: builtwith.com (tech profiling) chrome ext
+  
+- Google-Fu
+  "Copyright text" inurl:twitch
+  ToS text
+  privacy policy text
+  from main target to glean related hosts
+  
+- Shodan
+  www.shodan.io/search?query=twitch.tv
+
+- subdomain enum
+  linked and JS discovery
+  examine all the links of our main target w Burp
+  1) turn off passive scanning
+  2) set forms to auto submit
+  3) set scope to advanced control and use "keyword" of target name (not FQDN)
+  4) walk+browse main site, then spider all hosts recursively
+  to export: engagement tools --> analyze targets --> save as html --> copy hosts from target scope
+  
+  twotch.tv --> app.twitch.tv       --> ...   --> ...
+                new.twitch.tv           ...
+                marketing.twitch.tv     ...
+                                        ...
+                                        ...
+  
+  TOOLs: burp suite pro
+         GoSpider
+         Hakrawler
+         Subdomainizer (analyzing JS)
+            1) find subdomains referenced in JS
+            2) find cloud services referenced in JS
+            3) SHannon Entropy to find potentially sensitive items in js
+         Subscraper (has recursion)
+- subdomain scraping
+  TOOLs: infra sources: dnsdumpster
+                        netcraft
+                        waybackmachine
+                        PTR archive
+         search src: google
+                     bing
+                     baidu
+                     ask
+                     dogpile
+         cert src: cert.sh
+                   certspotter
+                   cert DB
+         security resources: hacktarget
+                             security trail
+                             threat miner
+                             threat crowd
+                             
+         e.g. google
+         site:twitch.tv -www.twitch.tv
+         site:twitch.tv -www.twitch.tv -watch.twitch.tv
+         
+         Amass
+         subfinder
+         projectdiscovery.io
+         
+         github enum - github-search | grep -v ".tmi"
+         shosubgo --> parser for shodan
+         go run main.go -d twitch.tv -s API_KEY
+         
+- scraping cloud ranges proactively
+  sslscrape --> go to AWS/GCP/Azure for SSL sites and parse certs to match your target
+  https://www.daehee.com/scan-aws-ip-ssl-certificates/
+  
+- subdomain bruteforce
+  TOOLs: massdns
+         amass -rf
+         they have multithreading and using multiple servers
+         
+         amass enum -brute -d twitch.tv -src
+         amass enum -brute -d twitch.tv -rf resolvers.txt -w brutef.txt
+         
+         shuffledns --> wrapper around massdns
+         
+         wordlists:
+         tailored
+         massive
+         jhaddix all.txt
+         who what where when wordlist by TomNomNom
+         assetnote/commonspeak2
+         
+- alteration scanning
+  dev.company.com
+  dev1.company.com
+  dev-1
+  dev2
+  origin-sub.domain.com
+  origin.sub.domain.com
+  etc
+  TOOLs: altdns
+         amass
+  
+  
+
+
+
+Other:
+- port analysis
+  TOOLs: massscan
+  massscan -p1-65535 IP --max-rate 1800 -iL $ipFile -oG $outfile.log
+  massscan study - https://danielmiessler.com/study/masscan/
+
+  dnmasscan --> wrapper for massscan to convert hosts to IPs
+  
+- service scanning (brutespray)
+  default cred check
+  masscan --> nmap service scan -oG --> brutespray cred bruteforce
+
+vulns
+- github leaks
+  TOOLs: github search --> https://github.com/gwen001/github-search
+  
+- subdomain takeover
+  TOOLs: can I take over xyz
+         subover
+         Nuclei
+
+
+  buckets
+  
+  
+  
+automation
+  screenshotting
+  TOOLs: aquatone
+         HTTPscreenshot
+         eyewitness
+         HTTP probe by Tomnomnom's
+  
+  
+  frameworks
+    give 1 seed domain --> goes through all the tools --> pulls new seed domains --> enum on new seed domains
+    while the above is running do dorking
+
+  interlace/codingo
+  hakluke guide --> https://hakluke.medium.com/interlace-a-productivity-tool-for-pentesters-and-bug-hunters-automate-and-multithread-your-d18c81371d3d
+  https://labs.detectify.com/2021/11/30/hakluke-creating-the-perfect-bug-bounty-automation/
+  https://github.com/codingo/Interlace
+  
+  while read line; do
+    nikto --host $line > ./$line-nikto.txt;
+  done < targets.txt
+  
+  interlace -tL ./targets.txt -threads 5 -c "nikto --host _target_ > ./_target_ -nikto.txt" -v
+  
+  TomNomNom's hacks repo --> https://github.com/tomnomnom/hacks
+ 
+ Framework Tiers:
+ B-Tier: lazy recon
+ A-Tier: findomain
+         rock-on
+         reckon-pipeline
+ S-Tier: intrigue.io
+         AssetNote
+         spiderfoot
+         Project Discovery Framework
+         Jaeles
+         Osmadeus
+         HunterSuite.io
+         BountyOffensive.com
+         reNgine
+         Scout
+         Nuclei
+         
+  
+ 
+ Random TOOLs: reconftw has both subfinder and amass
+               cert.sh
+               jQ --> json parsertool for bash
+               
+               go to a site --> check cert --> grab org name --> cert.sh
+
+
+
+
