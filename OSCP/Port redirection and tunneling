@@ -40,3 +40,9 @@ automatically accept the host key of our machine
 UserKnownHostsFile=/dev/null --> prevents ssh from attemptint to save the host key bysending the output to /dev/null
 StrictHostKeyChecking=no --> do not prompt to accept the host key
 ssh -R 1122:10.5.5.11:22 -R 13306:10.5.5.11:3306 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" kali@10.11.0.4 
+
+ignore commands the user supplies with 'command'
+prevent agent and X11 forwarding
+we dont want to allocate tty
+from="1.2.3.4",command="echo 'This account can only be used for port forwarding'",no-agent-forwarding,no-X11-forwarding,no-tty ssh-rsa ssh-rsa ...KEY... uname@host
+
