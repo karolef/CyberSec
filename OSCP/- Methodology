@@ -1,0 +1,80 @@
+Recon
+DNS
+for ip in $(seq 1 254); do host 1.2.3.$ip; done | grep -v 'not found'
+or dig/nslookup
+
+light
+nmap $rhost --top-ports 10 --open
+
+heavy
+nmap $rhost -p- -sV --reason --dns-server $dns_server_ip
+
+UDP scan
+-sU
+
+scripts
+ls -lh /usr/share/nmap/scripts/*ssh*
+nmap $rhost -p 22 -sV --script=ssh-hostkey
+
+
+webapp
+internal/external links
+
+curl $rhost -s -L | grep "title\|href" | sed -e 's/^[[:space:]]*//'
+
+curl $rhost -s -L | html2text -width '99' | uniq
+
+robots.txt / sitemap
+URL brute force
+dirb / dirbuster / wfuzz / burpsuite / gobuster
+/usr/share/seclists/
+general & CGI wordlists
+
+web scanners
+nmap
+nikto
+
+once we feel like we have all the info
+searchsploit
+
+==================================================================
+privilege escalation
+info gathering
+
+what is the OS? version? architecture?
+cat /etc/*-release
+uname -i
+lsb_release -a (on debian)
+
+who are we? where are we?
+id
+pwd
+
+users? which have a valid shell
+cat /etc/passwd
+grep -vE "nologin|false" /etc/passwd
+
+
+whats running on the box? active network services?
+ps aux
+netstat -antup
+dpgk -l
+
+what files/configs can we access?
+any incorrect file permissions?
+custom programs? SUID? SGID?
+scheduled to run?
+hardcoded creds?
+
+
+
+python -c 'import pty; pty.spawn("/bin/sh")'
+
+post exploitation
+grab the hashes
+check network connections
+database?
+check user folders (some not set to home)
+GUI? - pidof X
+
+
