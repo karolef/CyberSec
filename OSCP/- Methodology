@@ -34,6 +34,9 @@ web scanners
 nmap
 nikto
 
+nfs
+showmount -a $rhost
+
 once we feel like we have all the info
 searchsploit
 
