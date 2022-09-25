@@ -5,7 +5,7 @@ Notes/tools/resources from my cybersec adventures
 Notes/tools/resources from my cybersec adventures
 
 # web-pentesting-checklist
-######credits to https://github.com/harshinsecurity/web-pentesting-checklist/edit/main/README.md
+###### credits to https://github.com/harshinsecurity/web-pentesting-checklist/edit/main/README.md
 
 ## Pre-Engagement
 
