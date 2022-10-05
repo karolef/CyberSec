@@ -67,4 +67,6 @@ crackmapexec - https://github.com/Porchetta-Industries/CrackMapExec
 impacket - https://github.com/SecureAuthCorp/impacket
 responder - https://github.com/SpiderLabs/Responder
 bloodhound - https://github.com/BloodHoundAD/BloodHound
-
+===========================
+NFS
+showmount -e hostname - show mountpoints
