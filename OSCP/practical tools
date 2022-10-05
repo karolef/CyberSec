@@ -70,3 +70,7 @@ bloodhound - https://github.com/BloodHoundAD/BloodHound
 ===========================
 NFS
 showmount -e hostname - show mountpoints
+mount -t nfs IP:/mountpoint /dir/whereyouwantit
+
+
+
