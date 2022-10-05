@@ -75,4 +75,5 @@ mount -t nfs IP:/mountpoint /dir/whereyouwantit
 ===========================
 
 hunter.io --> to scrape emails/check naming conventions
-
+namemash - generate a list of possible usernames from a persons first and last name
+https://gist.github.com/superkojiman/11076951
