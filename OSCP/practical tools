@@ -72,5 +72,7 @@ NFS
 showmount -e hostname - show mountpoints
 mount -t nfs IP:/mountpoint /dir/whereyouwantit
 
+===========================
 
+hunter.io --> to scrape emails/check naming conventions
 
