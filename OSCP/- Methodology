@@ -82,4 +82,4 @@ GUI? - pidof X
 
 ==================
 win machine
-whoami /priv ---> look for SeImpersonatePrivilege or SaAssignPrimary TokenPrivilege --> potato attack
+whoami /priv ---> look for SeImpersonatePrivilege or SaAssignPrimaryTokenPrivilege --> potato attack
