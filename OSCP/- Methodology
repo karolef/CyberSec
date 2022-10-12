@@ -80,4 +80,6 @@ database?
 check user folders (some not set to home)
 GUI? - pidof X
 
-
+==================
+win machine
+whoami /priv ---> look for SeImpersonatePrivilege
