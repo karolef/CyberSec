@@ -175,3 +175,4 @@ searchsploit linux kernel ubuntu 16.03
 
 gcc 12345.c -o exploit
 
+getcap -r /
