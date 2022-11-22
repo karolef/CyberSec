@@ -176,4 +176,4 @@ searchsploit linux kernel ubuntu 16.03
 gcc 12345.c -o exploit
 
 find / -perm -u=s -type f 2>/dev/null
-getcap -r /
+getcap -r / 2>dev/null
