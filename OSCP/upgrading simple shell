@@ -1,6 +1,6 @@
 can be used with /bin/bash or /bin/sh
-python -c ‘import pty; pty.spawn(“/bin/bash”)’	Python BASH TTY shell
-python3 -c ‘import pty; pty.spawn(“/bin/bash”)’	Python 3 BASH TTY shell
+python -c 'import pty; pty.spawn("/bin/bash")'	Python BASH TTY shell
+python3 -c 'import pty; pty.spawn("/bin/bash")'	Python 3 BASH TTY shell
 echo os.system(‘/bin/bash’)	Echo BASH TTY shell
 /bin/bash -i	BASH TTY shell
 perl -e ‘exec “/bin/bash”;’	Perl BASH TTY shell
