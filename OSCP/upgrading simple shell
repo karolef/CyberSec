@@ -1,11 +1,11 @@
 can be used with /bin/bash or /bin/sh
 python -c 'import pty; pty.spawn("/bin/bash")'	Python BASH TTY shell
 python3 -c 'import pty; pty.spawn("/bin/bash")'	Python 3 BASH TTY shell
-echo os.system(‘/bin/bash’)	Echo BASH TTY shell
+echo os.system('/bin/bash')	Echo BASH TTY shell
 /bin/bash -i	BASH TTY shell
-perl -e ‘exec “/bin/bash”;’	Perl BASH TTY shell
-ruby -e ‘exec “/bin/bash”‘	Ruby BASH TTY shell
-lua -e ‘os.execute(‘/bin/bash’)’	Lua BASH TTY shell
+perl -e 'exec "/bin/bash";'	Perl BASH TTY shell
+ruby -e 'exec "/bin/bash"'	Ruby BASH TTY shell
+lua -e 'os.execute('/bin/bash')'	Lua BASH TTY shell
 exec “/bin/bash”	IRB BASH TTY shelll
 :!bash	Vi/Vim BASH TTY shell
 :set shell=/bin/bash:shell	Vi/Vim BASH TTY shell
